@@ -11,11 +11,11 @@ app.use(express.json());
 app.use(express.static('.'));
 
 const pool = mysql.createPool({
-    host: 'padaria-erikgraciano616-2ff6.l.aivencloud.com',
-    port: '24120',
-    user: 'avnadmin',
-    password: 'AVNS_MPxnNRug5ZZrc-haH6h',
-    database: 'defaultdb'
+    host: 'sql.freedb.tech',
+    port: '3306',
+    user: 'freedb_defaultdb',
+    password: 'tg$QP6u4MHxNcrb',
+    database: 'freedb_databases'
 });
 
 
@@ -25,7 +25,7 @@ app.post('/api/mysql', async (req, res) => {
         switch (tipo) {
             case 'cadastro':
                 var [rows, fields] = await pool.query(
-                    "insert into `defaultdb`.`tbl_cadastro` (`nome`, `login`, `senha`) values (?, ?, ?);",
+                    "insert into `freedb_databases`.`tbl_cadastro` (`nome`, `login`, `senha`) values (?, ?, ?);",
                     [nome, login, senha]
                 );
                 if (rows.affectedRows > 0) {
@@ -37,7 +37,7 @@ app.post('/api/mysql', async (req, res) => {
                 case 'login':
                     try {
                         var [rows, fields] = await pool.query(
-                            "select * from `defaultdb`.`tbl_cadastro` where `nome` = ? and `login` = ? and `senha` = ?;",
+                            "select * from `freedb_databases`.`tbl_cadastro` where `nome` = ? and `login` = ? and `senha` = ?;",
                             [nome, login, senha]
                         );
                         if (rows.length >= 1) {
@@ -71,7 +71,7 @@ app.post('/api/mysql', async (req, res) => {
                     addAnd = " and ";
                 }
 
-                var strSql = "select * from `defaultdb`.`tbl_cadastro` where" + 
+                var strSql = "select * from `freedb_databases`.`tbl_cadastro` where" + 
                     addNome + addAnd + addLogin + ";";
                 var [rows, fields] = await pool.query(strSql);
                 if (rows.length > 0) {
@@ -87,7 +87,7 @@ app.post('/api/mysql', async (req, res) => {
                 }
                 break;
                 case 'atualizacao':
-                    var strSql = "select * from `defaultdb`.`tbl_cadastro`;";
+                    var strSql = "select * from `freedb_databases`.`tbl_cadastro`;";
                     var [rows, fields] = await pool.query(strSql);
                     if (rows.length > 0) {
                         res.json({ 
@@ -129,7 +129,7 @@ app.post('/api/mysql', async (req, res) => {
                         addSenha = " , " + addSenha;
                     }
     
-                    var strSql = "update `defaultdb`.`tbl_cadastro` set " + 
+                    var strSql = "update `freedb_databases`.`tbl_cadastro` set " + 
                         addNome + addLogin + addSenha + 
                         " where `id` = " + addId + ";";
                     var [rows, fields] = await pool.query(strSql);
